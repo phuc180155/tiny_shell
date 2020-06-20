@@ -5,6 +5,21 @@
 
 const char *spe_arg[] = {"help", "cd", "exit", "envi", "datetime", "dir", "ps"};
 
+const char *spe_non_arg[] = {"exit"};
+const char *spe_one_arg[] = {"help", "datetime", "envi", "ps"};
+const char *spe_two_arg[] = {"cd", "dir"};
+int (*builtin_one_param)[](**args) = {
+	&Help;
+	&DateAndTime;
+	&Envi;
+	&ProcessCommand;
+};
+
+int (*builtin_two_param)[](**args, LPSTR cur_dir) = {
+	&Cd;
+	&Dir;
+};
+
 void ProcessCommand(char **argv) {
 	if (argv[1] == NULL) {
 		cout << "Required arguments.\n";
@@ -70,25 +85,27 @@ void ProcessCommand(char **argv) {
 	}
 	else 
 		cout << "Command " << argv[0] << " does not have option " << argv[1] << "\n";
-	return;
 }
 
-void BuiltInCommand(char **argv, LPSTR cur_dir) {
-	if (strcmp(argv[0], spe_arg[0]) == 0) 
-		Help(argv);
-	else if (strcmp(argv[0], spe_arg[1]) == 0) 
-		Cd(argv, cur_dir);
-	else if (strcmp(argv[0], spe_arg[2]) == 0) 
+void BuiltInCommand(char **argv, LPSTR cur_dir){
+	int i;
+	bool done = false ;
+	if (strcmp(argv[0], spe_non_arg[0])==0){
+		done = true;
 		exit(0);
-	else if (strcmp(argv[0], spe_arg[3]) == 0) 
-		Envi(argv);
-	else if (strcmp(argv[0], spe_arg[4]) == 0)
-		DateAndTime(argv);
-	else if (strcmp(argv[0], spe_arg[5]) == 0)
-		Dir(argv, cur_dir);
-	else if (strcmp(argv[0], spe_arg[6]) == 0)
-		ProcessCommand(argv);
-	else
+	}
+	for(i=0; i<4;++i){
+		if(strcmp(argv[0],spe_one_arg[i])==0){
+			done =  true;
+			(*builtin_one_param[i])(argv);
+		}
+	}
+	for(i=0; i<2;++i){
+		if(strcmp(argv[0],spe_two_arg[i])==0){
+			done =  true;
+			(*builtin_two_param[i])(argv, cur_dir));
+		}
+	}
+	if(!done)
 		cout << "Command not found.\nType 'help' to know more information\n";
-	return;
 }

@@ -13,8 +13,7 @@
 using namespace std;
 
 extern HANDLE h_fore_process;
-
-int main(int argc, char **argv) {
+void loop() {
 	LPSTR cur_dir = (char *)calloc(100, sizeof(char));
 	char *line_input = (char *)calloc(100, sizeof(char));
 	char **line_split;
@@ -36,5 +35,8 @@ int main(int argc, char **argv) {
 	delete line_input;
 	delete line_split;
 	delete cur_dir;
+}
+int main(int argc, char **argv) {
+	loop();
 	return 0;
 }

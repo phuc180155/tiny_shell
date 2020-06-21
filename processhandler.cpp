@@ -129,7 +129,7 @@ void CreateNewProcess(char **argv) {
 		wait_time = INFINITE;
 	else
 		wait_time = 0;
-	char *run_file = CombineLine(argv, 2);
+	char *run_file = Combine(argv, 2);
 	STARTUPINFO si;
 	PROCESS_INFORMATION pi;
 
@@ -137,36 +137,19 @@ void CreateNewProcess(char **argv) {
 	si.cb = sizeof(si);
 	si.wShowWindow = SW_SHOW;
 	si.dwFlags = STARTF_USESHOWWINDOW;
-	si.lpTitle = argv[1];
+	si.lpTitle = argv[2];
 	ZeroMemory(&pi, sizeof(pi));
-
-	// Start the child process.
-	if (!CreateProcess(NULL,			   // No module name (use command line)
-					   run_file,		   // Command line
-					   NULL,			   // Process handle not inheritable
-					   NULL,			   // Thread handle not inheritable
-					   FALSE,			   // Set handle inheritance to FALSE
-					   CREATE_NEW_CONSOLE, // Create new console
-					   NULL,			   // Use parent's environment block
-					   NULL,			   // Use parent's starting directory
-					   &si,				   // Pointer to STARTUPINFO structure
-					   &pi)				   // Pointer to PROCESS_INFORMATION structure
-	)
-	{
+	if (!CreateProcess(NULL, run_file, NULL, NULL, FALSE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi)) {
 		cout << "Create process failed\n";
 		return;
 	}
 
 	// get handle of child fore process
-	if (strcmp(argv[1], "-fore") == 0)
-	{
+	if (strcmp(argv[1], "-fore") == 0) {
 		h_fore_process = pi.hProcess;
 		signal(SIGINT, handleSigint);
 	}
-	// Wait until child process exits.
 	WaitForSingleObject(pi.hProcess, wait_time);
-
-	// Close process and thread handles.
 	CloseHandle(pi.hProcess);
 	CloseHandle(pi.hThread);
 }

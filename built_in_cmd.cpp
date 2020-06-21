@@ -75,7 +75,7 @@ void Cd(char **argv, LPSTR cur_dir) {
 		cout << "Current Directory: " << cur_dir << "\n";
 		return;
 	}
-	char *path = CombineLine(argv, 1);
+	char *path = Combine(argv, 1);
 	if (SetCurrentDirectory(path) == 0) 	
 		cout << "The system cannot find the specified path.\n";
 }
@@ -136,7 +136,6 @@ void GetAllEnvironmentVariables(){
 	}
 }
 
-// Get a specific environment variable
 void GetAnEnvironmentVariable(char **argv) {
 	if (argv[2] == NULL) {
 		cout << "Required arguments\n";
@@ -156,17 +155,16 @@ void GetAnEnvironmentVariable(char **argv) {
 	return;
 }
 
-// Set a specific environment variable
+
 void SetEnvironmentVariable(char **argv) {	
 	if (argv[3] == NULL) {
 		cout << "Required arguments\n";
 		return;
 	}
-	char *new_value = CombineLine(argv, 3);
-	// get evironment var
+	char *new_value = Combine(argv, 3);
 	char *value = (char *)calloc(10000, sizeof(char));
 	DWORD byte = 10000 * sizeof(char);
-	// if variable doesn't exist, make a new variable. Else then add to existance value
+	// if variable doesn't exist, make a new variable, else then add to existance value
 	if (GetEnvironmentVariableA(argv[2], value, byte) == 0)	{
 		if (!SetEnvironmentVariableA(argv[2], new_value))	{
 			cout <<"Set environment variable ERROR\n";

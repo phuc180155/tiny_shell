@@ -12,27 +12,21 @@
 
 using namespace std;
 
-#define MAX_BUFFER_SIZE 128
-#define TOKEN_DELIM " "
-
 extern HANDLE h_fore_process;
 
-int main(int argc, char **argv)
-{
-	LPSTR cur_dir = (char *)calloc(MAX_BUFFER_SIZE, sizeof(char));
-	char *line_input = (char *)calloc(MAX_BUFFER_SIZE, sizeof(char));
+int main(int argc, char **argv) {
+	LPSTR cur_dir = (char *)calloc(100, sizeof(char));
+	char *line_input = (char *)calloc(100, sizeof(char));
 	char **line_split;
 	cout << "\n\n---------------------------------------------------------------------------------------------------\n";
 	cout << "--------------------------------------Here comes the Shell ---------------------------------------\n";
 	cout << "---------------------------------------------------------------------------------------------------\n\n";
-	while (true)
-	{
-		DWORD len_dir = GetCurrentDirectory(100, cur_dir); // Take the length of the currentDirectory string, and the pointer cur_dir points to the CurrentDirectory
+	while (true) {
+		DWORD len_dir = GetCurrentDirectory(100, cur_dir); 	 // Take the length of the currentDirectory string, and the pointer cur_dir points to the CurrentDirectory
 		cout << "(AquaShell)" << cur_dir << ">";
-		cin.getline(line_input, MAX_BUFFER_SIZE); // line_input: Take input from the users
+		cin.getline(line_input, 100);			 // line_input: Take input from the users
 		cin.clear();
-		if (strcmp(line_input, "\0") == 0) // enter => continue the loop
-		{
+		if (strcmp(line_input, "\0") == 0) {				 // enter => continue the loop		
 			cout << "\n";
 			continue;
 		}

@@ -7,13 +7,10 @@
 #include <Windows.h>
 #include <string>
 
-// Read input
-char *ReadLine(void);
-
-// Split input to many char *
+// Split input:
 char **SplitLine(char *buf);
 
-// Combine path to a string
-char *CombineLine(char **argv, int start);
+// Combine path to a string:
+char *Combine(char **argv, int begin);
 
 #endif

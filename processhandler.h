@@ -8,27 +8,20 @@
 #include <sys/types.h>
 using namespace std;
 
-void GetAllProcess();
+void GetAllProcess();					// show all processes
 
-// Print All Child of Process which has PID
-void GetChildProcess(DWORD pid);
+void GetChildProcess(DWORD pid);		// show All Child of Process
 
-// Print All Thread of Process which has PID
-void GetThreadList(DWORD ProcessID);
+void GetThreadList(DWORD ProcessID);	 // Show All Thread of Process 
 
-// Suspend Process which has PID
-void SuspendProcess(DWORD pid);
+void CreateNewProcess(char **argv);		// Run a process
 
-// Resume Process which has PID
-void ResumeProcess(DWORD pid);
+void FindProcess(char *process_name);	// Find a Process
 
-// Find Process ID by its name
-void FindProcess(char *process_name);
+void SuspendProcess(DWORD pid);			// Suspend a process
 
-// Kill Process by ID
-void KillProcess(DWORD pid);
+void ResumeProcess(DWORD pid);			// Resume a process
 
-// Create a new process
-void CreateNewProcess(char **argv);
+void KillProcess(DWORD pid);			// Terminate a process
 
 #endif

@@ -1,17 +1,7 @@
 
 #include <iostream>
-#include <unistd.h>
-
-
-using namespace std;
-void sleep() {
-	for (int i = 0; i<10; i++) {
-		cout << i << endl;
-		sleep(1);
-	}
-}
 
 int main() {
-	void (*p[]) () = {sleep, sleep};
-	(*p[0])();
+	while(1);
+	return 0;
 }

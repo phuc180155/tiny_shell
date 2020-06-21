@@ -50,8 +50,8 @@ void Help(char **argv) {
 			 << "-[option]" << endl;
 	}
 	else if (!strcmp(argv[1], "-dir"))	{
-		cout << "Show list of files or folders in current folder or specific folder (write path after this command).\n";
-		cout << "EXAMPLES: \"dir\", \"dir C:/\"\n";
+		cout << "Show list of files or folders in current folder.\n";
+		cout << "EXAMPLES: \"dir\"\n";
 	}
 	else if (!strcmp(argv[1], "-envi"))	{
 		cout << "Supported options:\n";

@@ -110,10 +110,10 @@ void Dir(char **argv, LPSTR cur_dir)
 			// Convert date, time to string
 			string date = to_string(convert_time.wDay) + '/' + to_string(convert_time.wMonth) + '/' + to_string(convert_time.wYear);
 			string time = to_string(convert_time.wHour) + ':' + to_string(convert_time.wMinute) + ':' + to_string(convert_time.wSecond);
-			if (data.dwFileAttributes == FILE_ATTRIBUTE_ARCHIVE)
-				cout << setw(15) << left << date << setw(15) << left << time << setw(15) << left << "FILE" << setw(15) << left << data.cFileName << "\n";
 			if (data.dwFileAttributes == FILE_ATTRIBUTE_DIRECTORY)
 				cout << setw(15) << left << date << setw(15) << left << time << setw(15) << left << "FOLDER" << setw(15) << left << data.cFileName << "\n";
+			else 
+				cout << setw(15) << left << date << setw(15) << left << time << setw(15) << left << "FILE" << setw(15) << left << data.cFileName << "\n";
 			if (FindNextFile(handle, &data) == FALSE) break;
 	}
 	FindClose(handle);

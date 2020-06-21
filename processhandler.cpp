@@ -189,7 +189,7 @@ void GetThreadList(DWORD pid) {
 	CloseHandle(h_thread_snap);
 	return;
 }
-void FindProcess(const char *process_name) {
+void FindProcess(char *process_name) {
 	HANDLE hProcessSnap;
 	PROCESSENTRY32 pe32;
 	hProcessSnap = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);

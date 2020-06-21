@@ -23,7 +23,7 @@ void SuspendProcess(DWORD pid);
 void ResumeProcess(DWORD pid);
 
 // Find Process ID by its name
-void FindProcess(const char *process_name);
+void FindProcess(char *process_name);
 
 // Kill Process by ID
 void KillProcess(DWORD pid);

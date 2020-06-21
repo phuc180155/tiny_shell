@@ -3,90 +3,66 @@
 #include "built_in_cmd.h"
 #include "processhandler.h"
 
-const char *spe_arg[] = {"help", "cd", "exit", "envi", "datetime", "dir", "ps"};
-
-const char *spe_non_arg[] = {"exit"};
-const char *spe_one_arg[] = {"help", "datetime", "envi", "ps"};
-const char *spe_two_arg[] = {"cd", "dir"};
-int (*builtin_one_param)[](**args) = {
-	&Help;
-	&DateAndTime;
-	&Envi;
-	&ProcessCommand;
-};
-
-int (*builtin_two_param)[](**args, LPSTR cur_dir) = {
-	&Cd;
-	&Dir;
-};
+const char *pro_one_arg[] = {"-all"};
+const char *pro_pid_arg[] = {"-child",  "-thread", "-suspend", "-resume",  "-kill"};
+const char *pro_name_arg[] = {"-find"};
+const char *pro_run_arg[] = {"-fore", "-back"};
+void (*pro_one_func[]) () = {GetAllProcess};
+void (*pro_pid_func[]) (DWORD) = {GetChildProcess, GetThreadList, SuspendProcess, ResumeProcess, KillProcess};
+void (*pro_name_func[]) (char *) = {FindProcess};
+void (*pro_run_func[]) (char **) = {CreateNewProcess};
 
 void ProcessCommand(char **argv) {
 	if (argv[1] == NULL) {
 		cout << "Required arguments.\n";
 		return;
 	}
-	if (strcmp(argv[1], "-all") == 0) {
-		GetAllProcess();
+	int i;
+	bool done = false ;
+	if (strcmp(argv[1], pro_one_arg[0])==0){
+		(*pro_one_func[0])();
 		return;
 	}
-	else if (strcmp(argv[1], "-thread") == 0) {
-		if (argv[2] == NULL)	{
-			cout << "Required arguments.\n";
-			return;
+	
+	for(i=0; i<5;++i){
+		if(strcmp(argv[1],pro_pid_arg[i])==0){
+			if (argv[2] == NULL)	{
+				cout << "Required arguments.\n";
+				return;
+			}
+			done =  true;
+			DWORD pid = atoi(argv[2]);		// Convert string -> int
+			(*pro_pid_func[i])(pid);
 		}
-		DWORD pid = atoi(argv[2]);		// Convert string -> int
-		GetThreadList(pid);
 	}
-	else if (strcmp(argv[1], "-find") == 0) {
+	if (strcmp(argv[1], pro_name_arg[0])==0) {		
 		if (argv[2] == NULL) {
 			cout << "Required arguments.\n";
 			return;
 		}
-		FindProcess(argv[2]);
+		done = true;
+		(*pro_name_func[0])(argv[2]);
 	}
-	else if (strcmp(argv[1], "-child") == 0)	{
-		if (argv[2] == NULL)		{
-			cout << "Required arguments.\n";
-			return;
+	
+	for(i=0; i<2;++i){
+		if(strcmp(argv[1],pro_run_arg[i])==0){
+			if (argv[2] == NULL)	{
+				cout << "Required arguments.\n";
+				return;
+			}
+			done =  true;
+			(*pro_run_func[0])(argv);
 		}
-		DWORD pid = atoi(argv[2]);
-		GetChildProcess(pid);
 	}
-	else if (strcmp(argv[1], "-suspend") == 0) {
-		if (argv[2] == NULL) {
-			cout << "Required arguments.\n";
-			return;
-		}
-		DWORD pid = atoi(argv[2]);
-		SuspendProcess(pid);
-	}
-	else if (strcmp(argv[1], "-resume") == 0) {
-		if (argv[2] == NULL) {
-			cout << "Required arguments.\n";
-			return;
-		}
-		DWORD pid = atoi(argv[2]);
-		ResumeProcess(pid);
-	}
-	else if (strcmp(argv[1], "-fore") == 0 || strcmp(argv[1], "-back") == 0) {
-		if (argv[2] == NULL) {
-			cout << "Required arguments.\n";
-			return;
-		}
-		CreateNewProcess(argv);
-	}
-	else if (strcmp(argv[1], "-kill") == 0)	{
-		if (argv[2] == NULL) {
-			cout << "Required arguments.\n";
-			return;
-		}
-		DWORD pid = atoi(argv[2]);
-		KillProcess(pid);
-	}
-	else 
+	if(done == false)
 		cout << "Command " << argv[0] << " does not have option " << argv[1] << "\n";
 }
-
+	
+const char *spe_non_arg[] = {"exit"};
+const char *spe_one_arg[] = {"help", "datetime", "envi", "ps"};
+const char *spe_two_arg[] = {"cd", "dir"};	
+void (*builtin_one_param[]) (char **) = {Help, DateAndTime, Envi, ProcessCommand};
+void (*builtin_two_param[]) (char **, LPSTR) = {Cd, Dir};
 void BuiltInCommand(char **argv, LPSTR cur_dir){
 	int i;
 	bool done = false ;
@@ -103,7 +79,7 @@ void BuiltInCommand(char **argv, LPSTR cur_dir){
 	for(i=0; i<2;++i){
 		if(strcmp(argv[0],spe_two_arg[i])==0){
 			done =  true;
-			(*builtin_two_param[i])(argv, cur_dir));
+			(*builtin_two_param[i])(argv, cur_dir);
 		}
 	}
 	if(!done)
